@@ -1,5 +1,6 @@
 package com.dofustools.mesarchi.model;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -9,22 +10,21 @@ import java.io.Serializable;
 public class Area implements Serializable {
 
     @Id
-    private long id;
+    public ObjectId id;
     private String name;
 
     public Area() {
     }
 
-    public Area(long id, String name) {
-        this.id = id;
+    public Area(String name) {
         this.name = name;
     }
 
-    public long getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 

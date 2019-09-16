@@ -1,39 +1,40 @@
 package com.dofustools.mesarchi.model;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.Map;
 
 
 @Document(collection = "type")
 public class Type implements Serializable {
 
     @Id
-    private long id;
-    private String name;
+    public ObjectId id;
+    private Map<String, String> name;
 
     public Type() {
     }
 
-    public Type(long id, String name) {
-        this.id = id;
+    public Type(Map<String, String> name) {
         this.name = name;
     }
 
-    public long getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
-    public String getName() {
+    public Map<String, String> getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(Map<String, String> name) {
         this.name = name;
     }
 }
