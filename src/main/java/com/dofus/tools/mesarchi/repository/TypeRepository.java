@@ -1,6 +1,6 @@
-package com.dofustools.mesarchi.repository;
+package com.dofus.tools.mesarchi.repository;
 
-import com.dofustools.mesarchi.model.Type;
+import com.dofus.tools.mesarchi.model.Type;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

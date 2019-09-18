@@ -1,22 +1,24 @@
-package com.dofustools.mesarchi.model;
+package com.dofus.tools.mesarchi.model;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.Map;
 
 @Document(collection = "area")
 public class Area implements Serializable {
 
     @Id
     public ObjectId id;
-    private String name;
+    //Key: Language -> Value: name in the key language
+    private Map<String, String> name;
 
     public Area() {
     }
 
-    public Area(String name) {
+    public Area(Map<String, String> name) {
         this.name = name;
     }
 
@@ -28,11 +30,11 @@ public class Area implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
+    public Map<String, String> getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(Map<String, String> name) {
         this.name = name;
     }
 }

@@ -1,13 +1,14 @@
-package com.dofustools.mesarchi.controller;
+package com.dofus.tools.mesarchi.controller;
 
-import com.dofustools.mesarchi.model.Monster;
-import com.dofustools.mesarchi.repository.MonsterRepository;
+import com.dofus.tools.mesarchi.model.Monster;
+import com.dofus.tools.mesarchi.repository.MonsterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+//@RequestMapping(value={"/","/monsters"})
 public class MonsterController {
 
     @Autowired

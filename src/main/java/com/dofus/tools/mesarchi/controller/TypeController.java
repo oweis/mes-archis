@@ -1,6 +1,6 @@
-package com.dofustools.mesarchi.controller;
+package com.dofus.tools.mesarchi.controller;
 
-import com.dofustools.mesarchi.repository.TypeRepository;
+import com.dofus.tools.mesarchi.repository.TypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 //@RestController

@@ -1,4 +1,4 @@
-package com.dofustools.mesarchi.model;
+package com.dofus.tools.mesarchi.model;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -8,17 +8,19 @@ import java.io.Serializable;
 import java.util.Map;
 
 
-@Document(collection = "type")
-public class Type implements Serializable {
+@Document(collection = "familyGroup")
+public class FamilyGroup implements Serializable {
 
     @Id
     public ObjectId id;
+    //Key: Language -> Value: name in the key language
     private Map<String, String> name;
 
-    public Type() {
+    public FamilyGroup() {
     }
 
-    public Type(Map<String, String> name) {
+    public FamilyGroup(ObjectId id, Map<String, String> name) {
+        this.id = id;
         this.name = name;
     }
 

@@ -1,4 +1,4 @@
-package com.dofustools.mesarchi;
+package com.dofus.tools.mesarchi;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
