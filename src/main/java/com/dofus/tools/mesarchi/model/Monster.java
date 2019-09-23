@@ -14,14 +14,22 @@ public class Monster implements Serializable {
     @Id
     public ObjectId id;
     private String picture;
-    //Key: Language -> Value: name in the key language
+    /**
+     * Key: Language -> Value: name in the key language
+     */
     private Map<String, String> name;
     private long levelMin;
     private long levelMax;
     // private List<Area> areas;
-    private Type type; //Monster, Archimonster, Boss
-    // private Family family;
-    private Game game; // dofus, dofustouch
+    /**
+     *  Monster, Archimonster, Boss
+     */
+    private Type type;
+    private Family family;
+    /**
+     * dofus, dofustouch
+     */
+    private Game game;
 
     public Monster() {
     }

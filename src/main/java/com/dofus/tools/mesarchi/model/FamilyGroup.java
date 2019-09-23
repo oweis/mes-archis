@@ -19,8 +19,7 @@ public class FamilyGroup implements Serializable {
     public FamilyGroup() {
     }
 
-    public FamilyGroup(ObjectId id, Map<String, String> name) {
-        this.id = id;
+    public FamilyGroup(Map<String, String> name) {
         this.name = name;
     }
 
