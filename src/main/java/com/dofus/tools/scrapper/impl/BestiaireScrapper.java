@@ -86,7 +86,7 @@ public class BestiaireScrapper implements IScrapper {
         String level = docMonsterDetail.getElementsByClass("ak-encyclo-detail-level").get(0).text();
         String zones = docMonsterDetail.getElementsByClass("ak-container ak-panel").get(3).getElementsByClass("ak-panel-content").get(0).text();
 
-        LOGGER.info("name: {0}, picture: {1}, types: {2}, level: {3}, zones:{4}.", name, picture, types, level, zones);
+        LOGGER.info("name: {}, picture: {}, types: {}, level: {}, zones:{}.", name, picture, types, level, zones);
     }
 
     @Override
@@ -144,7 +144,7 @@ public class BestiaireScrapper implements IScrapper {
 
     public Table retrieveListFiltersByLanguage(String language, String dataname) throws IOException {
         String url = getLocalizedURL(BESTIAIRE_URL, FRENCH, language);
-        LOGGER.info("URL: {0}", url);
+        LOGGER.info("URL: {}", url);
         Document doc = Jsoup.connect(url)
                 .userAgent("Mozilla")
                 .timeout(random.nextInt(5000) + 10000)
@@ -160,7 +160,7 @@ public class BestiaireScrapper implements IScrapper {
             String id = area.getElementsByTag("input").get(0).attr("value");
             String name = area.text();
             tableByLanguage.put(id, language, name);
-            LOGGER.info("id: {0}, language: {1}, name:{2}.", id, language, name);
+            LOGGER.info("id: {}, language: {}, name:{}.", id, language, name);
         }
         return tableByLanguage;
     }
