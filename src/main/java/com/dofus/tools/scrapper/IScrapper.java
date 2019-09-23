@@ -6,5 +6,5 @@ import java.io.IOException;
 
 @Component
 public interface IScrapper {
-    void populateDatabase() throws IOException;
+    void populateDatabase() throws IOException, InterruptedException;
 }

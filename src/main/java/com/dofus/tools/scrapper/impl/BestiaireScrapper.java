@@ -1,9 +1,6 @@
 package com.dofus.tools.scrapper.impl;
 
-import com.dofus.tools.mesarchi.model.Area;
-import com.dofus.tools.mesarchi.model.Family;
-import com.dofus.tools.mesarchi.model.FamilyGroup;
-import com.dofus.tools.mesarchi.model.Type;
+import com.dofus.tools.mesarchi.model.*;
 import com.dofus.tools.mesarchi.repository.AreaRepository;
 import com.dofus.tools.mesarchi.repository.FamilyGroupRepository;
 import com.dofus.tools.mesarchi.repository.FamilyRepository;
@@ -21,9 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @Component
 public class BestiaireScrapper implements IScrapper {
@@ -34,7 +29,10 @@ public class BestiaireScrapper implements IScrapper {
     public static final String SPANISH = "es";
     public static final String ITALIAN = "it";
     public static final String PORTUGUESE = "pt";
+    public static final String DOFUS_URL = "https://www.dofus.com";
     public static final String BESTIAIRE_URL = "https://www.dofus.com/fr/mmorpg/encyclopedie/monstres";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(BestiaireScrapper.class);
 
     @Autowired
     AreaRepository areaRepository;
@@ -44,10 +42,7 @@ public class BestiaireScrapper implements IScrapper {
     FamilyGroupRepository familyGroupRepository;
     @Autowired
     FamilyRepository familyRepository;
-
     Random random = new Random();
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(BestiaireScrapper.class);
 
     private static String getLocalizedURL(String url, String sourceLanguage, String targetLanguage) {
 
@@ -76,22 +71,9 @@ public class BestiaireScrapper implements IScrapper {
                 .replace(encyclopediaMap.get(sourceLanguage).monster, encyclopediaMap.get(targetLanguage).monster);
     }
 
-    public static void retrieveMonsterDetailsByUrl(String url) throws IOException {
-        Document docMonster = Jsoup.connect(url).get();
-        Element docMonsterDetail = docMonster.getElementsByClass("ak-container ak-panel-stack ak-glue").get(0);
-        String name = docMonsterDetail.getElementsByClass("ak-return-link").get(0).text();
-
-        String picture = docMonsterDetail.getElementsByClass("ak-encyclo-detail-illu").get(0).getElementsByTag("img").get(0).attr("src");
-        String types = docMonsterDetail.getElementsByClass("ak-encyclo-detail-type").get(0).getElementsByTag("span").get(0).text();
-        String level = docMonsterDetail.getElementsByClass("ak-encyclo-detail-level").get(0).text();
-        String zones = docMonsterDetail.getElementsByClass("ak-container ak-panel").get(3).getElementsByClass("ak-panel-content").get(0).text();
-
-        LOGGER.info("name: {}, picture: {}, types: {}, level: {}, zones:{}.", name, picture, types, level, zones);
-    }
-
     @Override
-    public void populateDatabase() throws IOException {
-        populateDatabaseFilters();
+    public void populateDatabase() throws IOException, InterruptedException {
+        //populateDatabaseFilters();
         populateDatabaseMonstres();
     }
 
@@ -165,10 +147,54 @@ public class BestiaireScrapper implements IScrapper {
         return tableByLanguage;
     }
 
-    public void populateDatabaseMonstres() {
+    public void populateDatabaseMonstres() throws IOException, InterruptedException {
         //Do nothing, will be developed soon
+        int bestiairePagesNumber = 19;
+        List<String> monsterPathList = new ArrayList<>();
 
+        for (int i = 1; i <= bestiairePagesNumber; i++) {
+            Document doc = Jsoup.connect(BESTIAIRE_URL)
+                    .data("size", "96")
+                    .data("display", "table")
+                    .data("page", String.valueOf(i))
+                    .get();
+
+            Elements monstersTables = doc.getElementsByClass("ak-table ak-responsivetable");
+
+            for (Element monsterTable : monstersTables) {
+                Elements monsters = monsterTable.getElementsByClass("ak-bg-odd");
+                monsters.addAll(monsterTable.getElementsByClass("ak-bg-even"));
+
+                for (Element monster : monsters) {
+                    String monsterPath = monster.getElementsByTag("td").get(1).getElementsByTag("span").get(0).getElementsByTag("a").get(0).attr("href");
+                    retrieveMonsterDetailsByUrlAndLanguage(DOFUS_URL + monsterPath, ENGLISH);
+                    monsterPathList.add(monsterPath);
+                }
+            }
+        }
+        LOGGER.info("Size: {}.",    monsterPathList.size());
     }
+
+
+
+    public  void retrieveMonsterDetailsByUrlAndLanguage(String url, String language) throws IOException {
+        String localizedURL = getLocalizedURL(url, FRENCH, language);
+
+        Document docMonster = Jsoup.connect(localizedURL)
+                .userAgent("Mozilla")
+                .timeout(random.nextInt(5000) + 10000)
+                .get();
+        Element docMonsterDetail = docMonster.getElementsByClass("ak-container ak-panel-stack ak-glue").get(0);
+        String name = docMonsterDetail.getElementsByClass("ak-return-link").get(0).text();
+
+        String picture = docMonsterDetail.getElementsByClass("ak-encyclo-detail-illu").get(0).getElementsByTag("img").get(0).attr("src");
+        String types = docMonsterDetail.getElementsByClass("ak-encyclo-detail-type").get(0).getElementsByTag("span").get(0).text();
+        String level = docMonsterDetail.getElementsByClass("ak-encyclo-detail-level").get(0).text();
+        String zones = docMonsterDetail.getElementsByClass("ak-container ak-panel").get(3).getElementsByClass("ak-panel-content").get(0).text();
+
+        LOGGER.info("name: {}, picture: {}, types: {}, level: {}, zones: {}.", name, picture, types, level, zones);
+    }
+
 }
 
 
