@@ -4,8 +4,11 @@ import com.dofus.tools.mesarchi.model.*;
 import com.dofus.tools.mesarchi.repository.*;
 import com.dofus.tools.mesarchi.service.*;
 import com.dofus.tools.scrapper.IScrapper;
+import com.dofus.tools.scrapper.common.Constants;
+import com.dofus.tools.scrapper.helper.DownloadHelper;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import com.sun.org.apache.bcel.internal.generic.LAND;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -36,7 +39,6 @@ public class BestiaireScrapper implements IScrapper {
     public static final String DOFUS_URL = "https://www.dofus.com";
     public static final String BESTIAIRE_URL = "https://www.dofus.com/fr/mmorpg/encyclopedie/monstres";
     // This user agent is for if the server wants real humans to visit
-    public static final String USER_AGENT_MOZILLA = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BestiaireScrapper.class);
 
@@ -51,7 +53,6 @@ public class BestiaireScrapper implements IScrapper {
     FamilyService familyService;
     @Autowired
     MonsterService monsterService;
-
 
     Random random = new Random();
 
@@ -80,54 +81,6 @@ public class BestiaireScrapper implements IScrapper {
         return url.replace(encyclopediaMap.get(sourceLanguage).language, encyclopediaMap.get(targetLanguage).language)
                 .replace(encyclopediaMap.get(sourceLanguage).encyclopedia, encyclopediaMap.get(targetLanguage).encyclopedia)
                 .replace(encyclopediaMap.get(sourceLanguage).monster, encyclopediaMap.get(targetLanguage).monster);
-    }
-
-    public static void downloadImage(String search, String path) throws IOException {
-
-        // This will get input data from the server
-        InputStream inputStream = null;
-
-        // This will read the data from the server;
-        OutputStream outputStream = null;
-
-        try {
-            // This will open a socket from client to server
-            URL url = new URL(search);
-
-
-            // This socket type will allow to set user_agent
-            URLConnection con = url.openConnection();
-
-            // Setting the user agent
-            con.setRequestProperty("User-Agent", USER_AGENT_MOZILLA);
-
-            // Requesting input data from server
-            inputStream = con.getInputStream();
-
-            // Open local file writer
-            outputStream = new FileOutputStream(path);
-
-            // Limiting byte written to file per loop
-            byte[] buffer = new byte[2048];
-
-            // Increments file size
-            int length;
-
-            // Looping until server finishes
-            while ((length = inputStream.read(buffer)) != -1) {
-                // Writing data
-                outputStream.write(buffer, 0, length);
-            }
-        } catch (Exception ex) {
-            LOGGER.debug("ERROR ...");
-        }
-
-        // closing used resources
-        // The computer will not be able to use the image
-        // This is a must
-
-        outputStream.close();
-        inputStream.close();
     }
 
     @Override
@@ -185,7 +138,7 @@ public class BestiaireScrapper implements IScrapper {
         String url = getLocalizedURL(BESTIAIRE_URL, FRENCH, language);
         LOGGER.info("URL: {}", url);
         Document doc = Jsoup.connect(url)
-                .userAgent(USER_AGENT_MOZILLA)
+                .userAgent(Constants.USER_AGENT_MOZILLA)
                 .timeout(random.nextInt(5000) + 10000)
                 .get();
         Element familyGroupDivElement = doc.getElementsByAttributeValue("data-name", dataname).get(0);
@@ -213,7 +166,7 @@ public class BestiaireScrapper implements IScrapper {
                     .data("size", "96")
                     .data("display", "table")
                     .data("page", String.valueOf(i))
-                    .userAgent(USER_AGENT_MOZILLA)
+                    .userAgent(Constants.USER_AGENT_MOZILLA)
                     .timeout(random.nextInt(5000) + 10000)
                     .get();
 
@@ -248,12 +201,11 @@ public class BestiaireScrapper implements IScrapper {
     public Monster initializeMonster(String urlMonster) throws IOException {
 
         Document docMonster = Jsoup.connect(urlMonster)
-                .userAgent(USER_AGENT_MOZILLA)
+                .userAgent(Constants.USER_AGENT_MOZILLA)
                 .timeout(random.nextInt(5000) + 10000)
                 .get();
         Element docMonsterDetail = docMonster.getElementsByClass("ak-container ak-panel-stack ak-glue").get(0);
         String name = docMonsterDetail.getElementsByClass("ak-return-link").get(0).text();
-
         String picture = docMonsterDetail.getElementsByClass("ak-encyclo-detail-illu").get(0).getElementsByTag("img").get(0).attr("data-src");
         String types = docMonsterDetail.getElementsByClass("ak-encyclo-detail-type").get(0).getElementsByTag("span").get(0).text();
         String level = docMonsterDetail.getElementsByClass("ak-encyclo-detail-level").get(0).text();
@@ -281,7 +233,7 @@ public class BestiaireScrapper implements IScrapper {
         }
 
 
-//        downloadImage(picture, "C:/Workspace/Java/Picture/"+name+".jpg");
+//        DownloadHelper.downloadImage(picture, "C:/Workspace/Java/Picture/"+name+".jpg");
         System.out.println("Types: " + types + ", levelMin: " + levelMin + ", levelMax: " + levelMax + " areas: " + areas + ".");
         //LOGGER.info("name: {}, picture: {}, types: {}, level: {}, areas: {}.", name, picture, types, level, areas);
         Monster monster = new Monster();
@@ -296,8 +248,8 @@ public class BestiaireScrapper implements IScrapper {
     }
 
     public String scrapMonsterNameByLanguage(String monsterUrl, String language) throws IOException {
-        Document docMonster = Jsoup.connect(getLocalizedURL(monsterUrl, FRENCH, PORTUGUESE))
-                .userAgent(USER_AGENT_MOZILLA)
+        Document docMonster = Jsoup.connect(getLocalizedURL(monsterUrl, FRENCH, language))
+                .userAgent(Constants.USER_AGENT_MOZILLA)
                 .timeout(random.nextInt(5000) + 10000)
                 .get();
         Element docMonsterDetail = docMonster.getElementsByClass("ak-container ak-panel-stack ak-glue").get(0);
