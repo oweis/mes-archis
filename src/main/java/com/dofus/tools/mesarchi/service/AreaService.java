@@ -1,0 +1,37 @@
+package com.dofus.tools.mesarchi.service;
+
+import com.dofus.tools.mesarchi.model.Area;
+import com.dofus.tools.mesarchi.repository.AreaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+public class AreaService {
+    @Autowired
+    private AreaRepository areaRepository;
+
+    public List getAllAreas() {
+        List areas = new ArrayList();
+        areaRepository.findAll().forEach(areas::add);
+        return areas;
+    }
+
+    public Area getArea(String id) {
+        return areaRepository.findById(id).orElseGet(Area::new);
+    }
+
+    public void addArea(Area whiskey) {
+        areaRepository.save(whiskey);
+    }
+
+    public void updateArea(String id, Area whiskey) {
+        areaRepository.save(whiskey);
+    }
+
+    public void deleteArea(String id) {
+        areaRepository.deleteById(id);
+    }
+}
