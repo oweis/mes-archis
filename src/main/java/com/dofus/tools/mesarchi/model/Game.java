@@ -6,21 +6,21 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Document(collection = "family")
+@Document(collection = "game")
 public class Game {
 
     @Id
-    public ObjectId id;
+    public String id;
     public String name;
     //Maybe we will need to use another structure if we included pictures or server names in other languages
     public List<String> servers;
 
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
-    public Game setId(ObjectId id) {
+    public Game setId(String id) {
         this.id = id;
         return this;
     }

@@ -11,7 +11,7 @@ import java.util.Map;
 public class Family implements Serializable {
 
     @Id
-    public ObjectId id;
+    public String id;
     //Key: Language -> Value: name in the key language
     private Map<String, String> name;
 
@@ -22,11 +22,11 @@ public class Family implements Serializable {
         this.name = name;
     }
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(String id) {
         this.id = id;
     }
 

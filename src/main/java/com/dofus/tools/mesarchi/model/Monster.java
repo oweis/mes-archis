@@ -1,6 +1,5 @@
 package com.dofus.tools.mesarchi.model;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,14 +11,14 @@ import java.util.Map;
 public class Monster implements Serializable {
 
     @Id
-    public ObjectId id;
+    public String id;
     private String picture;
     /**
      * Key: Language -> Value: name in the key language
      */
     private Map<String, String> name;
-    private long levelMin;
-    private long levelMax;
+    private String levelMin;
+    private String levelMax;
     // private List<Area> areas;
     /**
      *  Monster, Archimonster, Boss
@@ -34,7 +33,7 @@ public class Monster implements Serializable {
     public Monster() {
     }
 
-    public Monster(ObjectId id, String picture, Map<String, String> name, long levelMin, long levelMax, Type type, Game game) {
+    public Monster(String id, String picture, Map<String, String> name, String levelMin, String levelMax, Type type, Game game) {
         this.id = id;
         this.picture = picture;
         this.name = name;
@@ -44,11 +43,11 @@ public class Monster implements Serializable {
         this.game = game;
     }
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -60,20 +59,53 @@ public class Monster implements Serializable {
         this.name = name;
     }
 
-    public long getLevelMin() {
+    public void setName(String key, String value){
+        name.put(key, value);
+    }
+
+    public String getLevelMin() {
         return levelMin;
     }
 
-    public void setLevelMin(long levelMin) {
+    public Monster setLevelMin(String levelMin) {
         this.levelMin = levelMin;
+        return this;
     }
 
-    public long getLevelMax() {
+    public String getLevelMax() {
         return levelMax;
     }
 
-    public void setLevelMax(long levelMax) {
+    public Monster setLevelMax(String levelMax) {
         this.levelMax = levelMax;
+        return this;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public Monster setType(Type type) {
+        this.type = type;
+        return this;
+    }
+
+    public Family getFamily() {
+        return family;
+    }
+
+    public Monster setFamily(Family family) {
+        this.family = family;
+        return this;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public Monster setGame(Game game) {
+        this.game = game;
+        return this;
     }
 
     public String getPicture() {
