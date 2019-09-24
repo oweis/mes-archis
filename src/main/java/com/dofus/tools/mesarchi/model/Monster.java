@@ -14,14 +14,14 @@ public class Monster implements Serializable {
     public String id;
     private String picture;
     /**
-     * Key: Language -> Value: name in the key language
+     * Key: Language -> Value: languageToName in the key language
      */
-    private Map<String, String> name;
+    private Map<String, String> languageToName;
     private String levelMin;
     private String levelMax;
     // private List<Area> areas;
     /**
-     *  Monster, Archimonster, Boss
+     * Monster, Archimonster, Boss
      */
     private Type type;
     private Family family;
@@ -33,10 +33,10 @@ public class Monster implements Serializable {
     public Monster() {
     }
 
-    public Monster(String id, String picture, Map<String, String> name, String levelMin, String levelMax, Type type, Game game) {
+    public Monster(String id, String picture, Map<String, String> languageToName, String levelMin, String levelMax, Type type, Game game) {
         this.id = id;
         this.picture = picture;
-        this.name = name;
+        this.languageToName = languageToName;
         this.levelMin = levelMin;
         this.levelMax = levelMax;
         this.type = type;
@@ -51,16 +51,16 @@ public class Monster implements Serializable {
         this.id = id;
     }
 
-    public Map<String, String> getName() {
-        return name;
+    public Map<String, String> getLanguageToName() {
+        return languageToName;
     }
 
-    public void setName(Map<String, String> name) {
-        this.name = name;
+    public void setLanguageToName(Map<String, String> languageToName) {
+        this.languageToName = languageToName;
     }
 
-    public void setName(String key, String value){
-        name.put(key, value);
+    public void setName(String key, String value) {
+        languageToName.put(key, value);
     }
 
     public String getLevelMin() {

@@ -1,14 +1,11 @@
 package com.dofus.tools.scrapper.impl;
 
 import com.dofus.tools.mesarchi.model.*;
-import com.dofus.tools.mesarchi.repository.*;
 import com.dofus.tools.mesarchi.service.*;
 import com.dofus.tools.scrapper.IScrapper;
 import com.dofus.tools.scrapper.common.Constants;
-import com.dofus.tools.scrapper.helper.DownloadHelper;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import com.sun.org.apache.bcel.internal.generic.LAND;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,12 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -189,11 +181,11 @@ public class BestiaireScrapper implements IScrapper {
         //set french name and the other monster information
         Monster monster = initializeMonster(monsterUrl);
         //set name in other languages
-        monster.getName().put(ENGLISH, scrapMonsterNameByLanguage(monsterUrl, ENGLISH));
-        monster.getName().put(SPANISH, scrapMonsterNameByLanguage(monsterUrl, SPANISH));
-        monster.getName().put(GERMAN, scrapMonsterNameByLanguage(monsterUrl, GERMAN));
-        monster.getName().put(PORTUGUESE, scrapMonsterNameByLanguage(monsterUrl, PORTUGUESE));
-        monster.getName().put(ITALIAN, scrapMonsterNameByLanguage(monsterUrl, ITALIAN));
+        monster.getLanguageToName().put(ENGLISH, scrapMonsterNameByLanguage(monsterUrl, ENGLISH));
+        monster.getLanguageToName().put(SPANISH, scrapMonsterNameByLanguage(monsterUrl, SPANISH));
+        monster.getLanguageToName().put(GERMAN, scrapMonsterNameByLanguage(monsterUrl, GERMAN));
+        monster.getLanguageToName().put(PORTUGUESE, scrapMonsterNameByLanguage(monsterUrl, PORTUGUESE));
+        monster.getLanguageToName().put(ITALIAN, scrapMonsterNameByLanguage(monsterUrl, ITALIAN));
 
         return monster;
     }
@@ -233,11 +225,11 @@ public class BestiaireScrapper implements IScrapper {
         }
 
 
-//        DownloadHelper.downloadImage(picture, "C:/Workspace/Java/Picture/"+name+".jpg");
+//      DownloadHelper.downloadImage(picture, "C:/Workspace/Java/Picture/"+name+".jpg");
         System.out.println("Types: " + types + ", levelMin: " + levelMin + ", levelMax: " + levelMax + " areas: " + areas + ".");
         //LOGGER.info("name: {}, picture: {}, types: {}, level: {}, areas: {}.", name, picture, types, level, areas);
         Monster monster = new Monster();
-        monster.getName().put(ENGLISH, name);
+        monster.getLanguageToName().put(ENGLISH, name);
         monster.setLevelMax(levelMax);
         monster.setLevelMax(levelMin);
         monster.setPicture(picture);

@@ -10,15 +10,15 @@ import java.util.Map;
 public class Type {
     @Id
     public String id;
-    //Key: Language -> Value: name in the key language
-    private Map<String, String> name;//Monster, ArchiMonster, DofusBoss
+    //Monster, ArchiMonster, DofusBoss
+    private Map<String, String> languageToName;
 
-    public Type(){
+    public Type() {
 
     }
 
-    public Type(Map<String, String> name) {
-        this.name = name;
+    public Type(Map<String, String> languageToName) {
+        this.languageToName = languageToName;
     }
 
     public String getId() {
@@ -30,12 +30,12 @@ public class Type {
         return this;
     }
 
-    public Map<String, String> getName() {
-        return name;
+    public Map<String, String> getLanguageToName() {
+        return languageToName;
     }
 
-    public Type setName(Map<String, String> name) {
-        this.name = name;
+    public Type setLanguageToName(Map<String, String> languageToName) {
+        this.languageToName = languageToName;
         return this;
     }
 }

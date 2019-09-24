@@ -1,6 +1,5 @@
 package com.dofus.tools.mesarchi.model;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,14 +11,14 @@ public class Family implements Serializable {
 
     @Id
     public String id;
-    //Key: Language -> Value: name in the key language
-    private Map<String, String> name;
+    //Key: Language -> Value: languageToName in the key language
+    private Map<String, String> languageToName;
 
     public Family() {
     }
 
     public Family(Map<String, String> name) {
-        this.name = name;
+        this.languageToName = name;
     }
 
     public String getId() {
@@ -30,11 +29,11 @@ public class Family implements Serializable {
         this.id = id;
     }
 
-    public Map<String, String> getName() {
-        return name;
+    public Map<String, String> getLanguageToName() {
+        return languageToName;
     }
 
-    public void setName(Map<String, String> name) {
-        this.name = name;
+    public void setLanguageToName(Map<String, String> languageToName) {
+        this.languageToName = languageToName;
     }
 }
