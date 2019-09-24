@@ -23,12 +23,12 @@ public class MonsterService {
         return monsterRepository.findById(id).orElseGet(Monster::new);
     }
 
-    public void addMonster(Monster whiskey) {
-        monsterRepository.save(whiskey);
+    public Monster addMonster(Monster whiskey) {
+       return monsterRepository.save(whiskey);
     }
 
-    public void updateMonster(String id, Monster whiskey) {
-        monsterRepository.save(whiskey);
+    public Monster updateMonster(Monster whiskey) {
+        return monsterRepository.save(whiskey);
     }
 
     public void deleteMonster(String id) {

@@ -2,6 +2,7 @@ package com.dofus.tools.mesarchi.controller;
 
 import com.dofus.tools.mesarchi.model.Monster;
 import com.dofus.tools.mesarchi.repository.MonsterRepository;
+import com.dofus.tools.mesarchi.service.MonsterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,34 +13,33 @@ import org.springframework.web.bind.annotation.*;
 public class MonsterController {
 
     @Autowired
-    private MonsterRepository monsterRepository;
+    private MonsterService monsterService;
 
     @GetMapping("/monsters")
     public String getAll(Model model) {
-        model.addAttribute("monsters", monsterRepository.findAll());
+        model.addAttribute("monsters", monsterService.getAllMonsters());
         return "monsters";
     }
 
     @GetMapping("/monsters/{id}")
-    String  get(@PathVariable long id, Model model) {
-        model.addAttribute("monster", monsterRepository.findById(id).get());
+    String  get(@PathVariable String id, Model model) {
+        model.addAttribute("monster", monsterService.getMonster(id));
         return "monster";
     }
 
     @PostMapping("/monsters")
     void add(@RequestBody Monster monster) {
-        monsterRepository.save(monster);
+        monsterService.addMonster(monster);
     }
 
     @PostMapping("/monsters/delete/{id}")
-    String delete(@PathVariable long id) {
-        monsterRepository.deleteById(id);
+    String delete(@PathVariable String id) {
+        monsterService.deleteMonster(id);
         return "redirect:/monsters";
     }
 
     @PutMapping("/monsters")
     void update(@RequestBody Monster monster) {
-        System.out.println();
-        monsterRepository.save(monster);
+        monsterService.updateMonster(monster);
     }
 }

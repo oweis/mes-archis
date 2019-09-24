@@ -23,12 +23,12 @@ public class TypeService {
         return typeRepository.findById(id).orElseGet(Type::new);
     }
 
-    public void addType(Type whiskey) {
-        typeRepository.save(whiskey);
+    public Type addType(Type whiskey) {
+        return typeRepository.save(whiskey);
     }
 
-    public void updateType(String id, Type whiskey) {
-        typeRepository.save(whiskey);
+    public Type updateType(Type whiskey) {
+        return typeRepository.save(whiskey);
     }
 
     public void deleteType(String id) {

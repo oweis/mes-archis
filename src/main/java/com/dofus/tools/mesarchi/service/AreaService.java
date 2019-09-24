@@ -23,12 +23,12 @@ public class AreaService {
         return areaRepository.findById(id).orElseGet(Area::new);
     }
 
-    public void addArea(Area whiskey) {
-        areaRepository.save(whiskey);
+    public Area addArea(Area whiskey) {
+        return areaRepository.save(whiskey);
     }
 
-    public void updateArea(String id, Area whiskey) {
-        areaRepository.save(whiskey);
+    public Area updateArea(Area whiskey) {
+        return areaRepository.save(whiskey);
     }
 
     public void deleteArea(String id) {
