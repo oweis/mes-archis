@@ -12,7 +12,7 @@
     <groupId>com.dofus.tools</groupId>
     <artifactId>mesarchi</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <languageToName>mes-archi</languageToName>
+    <name>mes-archi</name>
     <description>A dofus tool to manage dofus ocre quest.</description>
 
     <!--
