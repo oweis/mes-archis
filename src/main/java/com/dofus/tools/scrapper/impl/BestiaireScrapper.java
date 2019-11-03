@@ -1,7 +1,7 @@
 package com.dofus.tools.scrapper.impl;
 
 import com.dofus.tools.mesarchi.model.*;
-import com.dofus.tools.mesarchi.service.*;
+import com.dofus.tools.mesarchi.service.MonsterServiceImpl;
 import com.dofus.tools.scrapper.IScrapper;
 import com.dofus.tools.scrapper.common.Constants;
 import com.google.common.collect.HashBasedTable;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class BestiaireScrapper implements IScrapper {
-
+/*
     public static final String FRENCH = "fr";
     public static final String ENGLISH = "en";
     public static final String GERMAN = "de";
@@ -44,7 +44,7 @@ public class BestiaireScrapper implements IScrapper {
     @Autowired
     FamilyService familyService;
     @Autowired
-    MonsterService monsterService;
+    MonsterServiceImpl monsterService;
     @Autowired
     ZoneService zoneService;
 
@@ -213,12 +213,12 @@ public class BestiaireScrapper implements IScrapper {
         monster.setPicture(picture);
 
 
-/*
-        String familyNameFrench = docMonsterDetail.getElementsByClass("ak-encyclo-detail-type").get(0).getElementsByTag("span").get(0).text();
-        System.out.println("Family: " + familyNameFrench);
-        Family family = familyService.getFamilyByLanguageToNamePair(FRENCH, familyNameFrench);
-        monster.setFamily(family);
-*/
+
+//      String familyNameFrench = docMonsterDetail.getElementsByClass("ak-encyclo-detail-type").get(0).getElementsByTag("span").get(0).text();
+//      System.out.println("Family: " + familyNameFrench);
+//      Family family = familyService.getFamilyByLanguageToNamePair(FRENCH, familyNameFrench);
+//      monster.setFamily(family);
+
 
 
         String zones = docMonsterDetail.getElementsByClass("ak-container ak-panel").get(3).getElementsByClass("ak-panel-content").get(0).text();
@@ -272,4 +272,6 @@ public class BestiaireScrapper implements IScrapper {
         Element docMonsterDetail = docMonster.getElementsByClass("ak-container ak-panel-stack ak-glue").get(0);
         return docMonsterDetail.getElementsByClass("ak-return-link").get(0).text();
     }
+
+    */
 }

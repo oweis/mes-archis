@@ -1,7 +1,7 @@
 package com.dofus.tools.mesarchi.controller;
 
 import com.dofus.tools.mesarchi.model.Monster;
-import com.dofus.tools.mesarchi.service.MonsterService;
+import com.dofus.tools.mesarchi.service.MonsterServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 public class MonsterController {
 
     @Autowired
-    private MonsterService monsterService;
+    private MonsterServiceImpl monsterService;
 
     @GetMapping("/monsters")
     public String getAll(Model model) {

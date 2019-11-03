@@ -1,6 +1,5 @@
 package com.dofus.tools.mesarchi.service;
 
-import com.dofus.tools.mesarchi.model.FamilyGroup;
 import com.dofus.tools.mesarchi.model.Monster;
 import com.dofus.tools.mesarchi.repository.MonsterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class MonsterService {
+public class MonsterServiceImpl {
     @Autowired
     private MonsterRepository monsterRepository;
 
