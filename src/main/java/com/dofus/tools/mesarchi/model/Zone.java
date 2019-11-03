@@ -3,40 +3,37 @@ package com.dofus.tools.mesarchi.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
 import java.util.Map;
 
+@Document(collection = "zone")
+public class Zone implements Serializable {
 
-@Document(collection = "type")
-public class Type {
     @Id
     public String id;
-    //Monster, ArchiMonster, DofusBoss
+    //Key: Language -> Value: languageToName in the key language
     private Map<String, String> languageToName;
 
-    public Type() {
-
+    public Zone() {
     }
 
-    public Type(Map<String, String> languageToName) {
-        this.languageToName = languageToName;
+    public Zone(Map<String, String> name) {
+        this.languageToName = name;
     }
 
     public String getId() {
         return id;
     }
 
-    public Type setId(String id) {
+    public void setId(String id) {
         this.id = id;
-        return this;
     }
 
     public Map<String, String> getLanguageToName() {
         return languageToName;
     }
 
-    public Type setLanguageToName(Map<String, String> languageToName) {
+    public void setLanguageToName(Map<String, String> languageToName) {
         this.languageToName = languageToName;
-        return this;
     }
 }
-

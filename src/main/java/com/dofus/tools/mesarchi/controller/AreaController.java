@@ -1,8 +1,6 @@
 package com.dofus.tools.mesarchi.controller;
 
 import com.dofus.tools.mesarchi.model.Area;
-import com.dofus.tools.mesarchi.model.Monster;
-import com.dofus.tools.mesarchi.repository.AreaRepository;
 import com.dofus.tools.mesarchi.service.AreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,7 +15,7 @@ public class AreaController {
 
     @PostMapping("/areas")
     Area add(@RequestBody Area area) {
-        return areaService.addArea(area);
+        return areaService.save(area);
     }
 }
 

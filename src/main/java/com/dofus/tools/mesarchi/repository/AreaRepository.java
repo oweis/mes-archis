@@ -8,6 +8,5 @@ import java.util.Map;
 
 @Repository
 public interface AreaRepository extends MongoRepository<Area, String> {
-    Area findByName(Map<String, String> name);
 }
 

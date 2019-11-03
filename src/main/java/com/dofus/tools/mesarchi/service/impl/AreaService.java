@@ -7,38 +7,36 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AreaService {
     @Autowired
     private AreaRepository areaRepository;
 
-    public Optional<Area> get(String id) {
-        return areaRepository.findById(id);//orElseGet(Area::new);
-    }
-
-
-    public List<Area> getAll() {
+    public List<Area> getAllAreas() {
         List areas = new ArrayList();
         areaRepository.findAll().forEach(areas::add);
         return areas;
     }
 
-    public Area save(Area area) {
-        return areaRepository.save(area);
+    public Area getArea(String id) {
+        return areaRepository.findById(id).orElseGet(Area::new);
     }
 
-    public Area update(Area area) {
-        return areaRepository.save(area);
+    public Area addArea(Area whiskey) {
+        return areaRepository.save(whiskey);
     }
 
-    public void delete(Area area) {
-        areaRepository.delete(area);
+    public Area updateArea(Area whiskey) {
+        return areaRepository.save(whiskey);
+    }
+
+    public void deleteArea(String id) {
+        areaRepository.deleteById(id);
     }
 
     public Area getAreaByLanguageToNamePair(String language, String name){
-        return getAll().stream()
+        return getAllAreas().stream()
                 .filter(area -> name.equals(area.getLanguageToName().get(language)))
                 .findFirst()
                 .orElse(null);

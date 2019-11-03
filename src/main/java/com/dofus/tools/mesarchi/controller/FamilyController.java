@@ -1,6 +1,5 @@
 package com.dofus.tools.mesarchi.controller;
 
-import com.dofus.tools.mesarchi.repository.FamilyRepository;
 import com.dofus.tools.mesarchi.service.FamilyService;
 import org.springframework.beans.factory.annotation.Autowired;
 

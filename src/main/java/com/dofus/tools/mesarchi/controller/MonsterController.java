@@ -1,10 +1,8 @@
 package com.dofus.tools.mesarchi.controller;
 
 import com.dofus.tools.mesarchi.model.Monster;
-import com.dofus.tools.mesarchi.repository.MonsterRepository;
 import com.dofus.tools.mesarchi.service.MonsterService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 

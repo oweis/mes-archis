@@ -24,12 +24,12 @@ public class FamilyGroupService {
         return familyGroupRepository.findById(id).orElseGet(FamilyGroup::new);
     }
 
-    public FamilyGroup addFamilyGroup(FamilyGroup familyGroup) {
-        return familyGroupRepository.save(familyGroup);
+    public FamilyGroup addFamilyGroup(FamilyGroup whiskey) {
+        return familyGroupRepository.save(whiskey);
     }
 
-    public FamilyGroup updateFamilyGroup(FamilyGroup familyGroup) {
-        return  familyGroupRepository.save(familyGroup);
+    public FamilyGroup updateFamilyGroup(FamilyGroup whiskey) {
+        return  familyGroupRepository.save(whiskey);
     }
 
     public void deleteFamilyGroup(String id) {

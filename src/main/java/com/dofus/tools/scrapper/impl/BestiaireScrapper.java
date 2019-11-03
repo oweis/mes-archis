@@ -45,6 +45,8 @@ public class BestiaireScrapper implements IScrapper {
     FamilyService familyService;
     @Autowired
     MonsterService monsterService;
+    @Autowired
+    ZoneService zoneService;
 
     Random random = new Random();
 
@@ -77,8 +79,8 @@ public class BestiaireScrapper implements IScrapper {
 
     @Override
     public void populateDatabase() throws IOException, InterruptedException {
-        populateDatabaseFilters();
-        //populateDatabaseMonstres();
+    //    populateDatabaseFilters();
+          populateDatabaseMonstres();
     }
 
     public void populateDatabaseFilters() throws IOException {
@@ -91,7 +93,7 @@ public class BestiaireScrapper implements IScrapper {
         Table areaTable = retrieveListFilters(areaDataname);
         Map<String, Map<String, String>> areaMap = areaTable.rowMap();
         for (String row : areaMap.keySet()) {
-            areaService.addArea(new Area(areaMap.get(row)));
+            areaService.save(new Area(areaMap.get(row)));
         }
 
         Table familyGroupTable = retrieveListFilters(familyGroupDataname);
@@ -131,26 +133,25 @@ public class BestiaireScrapper implements IScrapper {
         LOGGER.info("URL: {}", url);
         Document doc = Jsoup.connect(url)
                 .userAgent(Constants.USER_AGENT_MOZILLA)
-                .timeout(random.nextInt(5000) + 10000)
+                .timeout(random.nextInt(10000) + 10000)
                 .get();
-        Element familyGroupDivElement = doc.getElementsByAttributeValue("data-name", dataname).get(0);
-        Elements familyGroupListElements = familyGroupDivElement.getElementsByClass("ak-list-filters-check ak-searchable-list");
-        Element familyGroupListElement = familyGroupListElements != null && !familyGroupListElements.isEmpty() ? familyGroupListElements.get(0) : familyGroupDivElement.getElementsByClass("ak-list-filters-check").get(0);
+        Element filtersDivElement = doc.getElementsByAttributeValue("data-name", dataname).get(0);
+        Elements filtersListElements = filtersDivElement.getElementsByClass("ak-list-filters-check ak-searchable-list");
+        Element filtersListElement = filtersListElements != null && !filtersListElements.isEmpty() ? filtersListElements.get(0) : filtersDivElement.getElementsByClass("ak-list-filters-check").get(0);
 
 
-        Elements familyGroups = familyGroupListElement.getElementsByTag("li");
-        Table<String, String, String> tableByLanguage = HashBasedTable.create();
-        for (Element area : familyGroups) {
-            String id = area.getElementsByTag("input").get(0).attr("value");
-            String name = area.text();
-            tableByLanguage.put(id, language, name);
+        Elements filters = filtersListElement.getElementsByTag("li");
+        Table<String, String, String> filterNameTable = HashBasedTable.create();
+        for (Element filter : filters) {
+            String id = filter.getElementsByTag("input").get(0).attr("value");
+            String name = filter.text();
+            filterNameTable.put(id, language, name);
             LOGGER.info("id: {}, language: {}, name:{}.", id, language, name);
         }
-        return tableByLanguage;
+        return filterNameTable;
     }
 
     public void populateDatabaseMonstres() throws IOException {
-        //Do nothing, will be developed soon
         int bestiairePagesNumber = 19;
 
         for (int i = 1; i <= bestiairePagesNumber; i++) {
@@ -159,7 +160,7 @@ public class BestiaireScrapper implements IScrapper {
                     .data("display", "table")
                     .data("page", String.valueOf(i))
                     .userAgent(Constants.USER_AGENT_MOZILLA)
-                    .timeout(random.nextInt(5000) + 10000)
+                    .timeout(random.nextInt(10000) + 10000)
                     .get();
 
             Elements monstersTables = doc.getElementsByClass("ak-table ak-responsivetable");
@@ -177,9 +178,11 @@ public class BestiaireScrapper implements IScrapper {
         }
     }
 
+
     public Monster scrapMonster(String monsterUrl) throws IOException {
         //set french name and the other monster information
         Monster monster = initializeMonster(monsterUrl);
+
         //set name in other languages
         monster.getLanguageToName().put(ENGLISH, scrapMonsterNameByLanguage(monsterUrl, ENGLISH));
         monster.getLanguageToName().put(SPANISH, scrapMonsterNameByLanguage(monsterUrl, SPANISH));
@@ -191,65 +194,82 @@ public class BestiaireScrapper implements IScrapper {
     }
 
     public Monster initializeMonster(String urlMonster) throws IOException {
+        Monster monster = new Monster();
 
         Document docMonster = Jsoup.connect(urlMonster)
                 .userAgent(Constants.USER_AGENT_MOZILLA)
-                .timeout(random.nextInt(5000) + 10000)
+                .timeout(random.nextInt(10000) + 10000)
                 .get();
         Element docMonsterDetail = docMonster.getElementsByClass("ak-container ak-panel-stack ak-glue").get(0);
+
+
         String name = docMonsterDetail.getElementsByClass("ak-return-link").get(0).text();
+        Map<String, String> languageToName = new HashMap<>();
+        languageToName.put(FRENCH, name);
+        monster.setLanguageToName(languageToName);
+
+
         String picture = docMonsterDetail.getElementsByClass("ak-encyclo-detail-illu").get(0).getElementsByTag("img").get(0).attr("data-src");
-        String types = docMonsterDetail.getElementsByClass("ak-encyclo-detail-type").get(0).getElementsByTag("span").get(0).text();
-        String level = docMonsterDetail.getElementsByClass("ak-encyclo-detail-level").get(0).text();
+        monster.setPicture(picture);
 
 
-        String areas = docMonsterDetail.getElementsByClass("ak-container ak-panel").get(3).getElementsByClass("ak-panel-content").get(0).text();
-        if (areas.contains("Spell animations")) {
-            areas = "";
-        }
+/*
+        String familyNameFrench = docMonsterDetail.getElementsByClass("ak-encyclo-detail-type").get(0).getElementsByTag("span").get(0).text();
+        System.out.println("Family: " + familyNameFrench);
+        Family family = familyService.getFamilyByLanguageToNamePair(FRENCH, familyNameFrench);
+        monster.setFamily(family);
+*/
 
-        List<String> areasList = Arrays.stream(areas.split(","))
-                .map(areasElement -> areasElement.trim())
+
+        String zones = docMonsterDetail.getElementsByClass("ak-container ak-panel").get(3).getElementsByClass("ak-panel-content").get(0).text();
+        zones = zones.contains("Spell animations") ?  "" : zones;
+        List<String> zoneNameList = Arrays.stream(zones.split(","))
+                .map(zoneElement -> zoneElement.trim())
                 .collect(Collectors.toList());
 
-
-        String levelMin = "";
-        String levelMax = "";
-        String[] levelList = level.replace("Level:", "").replace("to", ",").split(",");
-        if (levelList.length == 2) {
-            levelMin = levelList[0];
-            levelMax = levelList[1];
-        } else {
-            levelMin = levelList[0];
-            levelMax = levelList[0];
+        List<Zone> zoneList = new ArrayList<>();
+        for (String zoneName:zoneNameList){
+           Optional<Zone> zone = zoneService.getZoneByLanguageToNamePair(FRENCH, zoneName);
+           Zone newZone = null;
+           if(!zone.isPresent()){
+               Map<String, String> languageToNameZone = new HashMap<>();
+               languageToNameZone.put(FRENCH, name);
+               newZone = new Zone(languageToNameZone);
+               zoneService.addZone(newZone);
+           }
+           zoneList.add(newZone);
         }
+        monster.setZones(zoneList);
 
 
-//      DownloadHelper.downloadImage(picture, "C:/Workspace/Java/Picture/"+name+".jpg");
-        System.out.println("Types: " + types + ", levelMin: " + levelMin + ", levelMax: " + levelMax + " areas: " + areas + ".");
-        //LOGGER.info("name: {}, picture: {}, types: {}, level: {}, areas: {}.", name, picture, types, level, areas);
-        Monster monster = new Monster();
-        monster.getLanguageToName().put(ENGLISH, name);
+        String level = docMonsterDetail.getElementsByClass("ak-encyclo-detail-level").get(0).text();
+        String levelMin;
+        String levelMax;
+        String[] levelList = level.replace("Niveau :", "").replace("à", ",").split(",");
+        if (levelList.length == 2) {
+            levelMin = levelList[0].trim();
+            levelMax = levelList[1].trim();
+        } else {
+            levelMin = levelList[0].trim();
+            levelMax = levelList[0].trim();
+        }
         monster.setLevelMax(levelMax);
-        monster.setLevelMax(levelMin);
-        monster.setPicture(picture);
+        monster.setLevelMin(levelMin);
+
+        //DownloadHelper.downloadImage(picture, "C:/Workspace/Java/Picture/"+name+".jpg");
+        //System.out.println("Types: " + typeNameFrench + ", levelMin: " + levelMin + ", levelMax: " + levelMax + " areas: " + areas + ".");
+        //LOGGER.info("name: {}, picture: {}, types: {}, level: {}, areas: {}.", name, picture, types, level, areas);
         //monster.setGame();
 
-
-        return new Monster();
+        return monster;
     }
 
     public String scrapMonsterNameByLanguage(String monsterUrl, String language) throws IOException {
         Document docMonster = Jsoup.connect(getLocalizedURL(monsterUrl, FRENCH, language))
                 .userAgent(Constants.USER_AGENT_MOZILLA)
-                .timeout(random.nextInt(5000) + 10000)
+                .timeout(random.nextInt(10000) + 10000)
                 .get();
         Element docMonsterDetail = docMonster.getElementsByClass("ak-container ak-panel-stack ak-glue").get(0);
         return docMonsterDetail.getElementsByClass("ak-return-link").get(0).text();
-
     }
 }
-
-
-
-

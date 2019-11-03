@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 
@@ -19,12 +20,32 @@ public class Monster implements Serializable {
     private Map<String, String> languageToName;
     private String levelMin;
     private String levelMax;
-    // private List<Area> areas;
+    private List<Area> areas;
     /**
      * Monster, Archimonster, Boss
      */
-    private Type type;
     private Family family;
+
+    private List<Zone> zones;
+
+    public List<Zone> getZones() {
+        return zones;
+    }
+
+    public Monster setZones(List<Zone> zones) {
+        this.zones = zones;
+        return this;
+    }
+
+    public List<Area> getAreas() {
+        return areas;
+    }
+
+    public Monster setAreas(List<Area> areas) {
+        this.areas = areas;
+        return this;
+    }
+
     /**
      * dofus, dofustouch
      */
@@ -33,13 +54,12 @@ public class Monster implements Serializable {
     public Monster() {
     }
 
-    public Monster(String id, String picture, Map<String, String> languageToName, String levelMin, String levelMax, Type type, Game game) {
+    public Monster(String id, String picture, Map<String, String> languageToName, String levelMin, String levelMax, Game game) {
         this.id = id;
         this.picture = picture;
         this.languageToName = languageToName;
         this.levelMin = levelMin;
         this.levelMax = levelMax;
-        this.type = type;
         this.game = game;
     }
 
@@ -55,12 +75,9 @@ public class Monster implements Serializable {
         return languageToName;
     }
 
-    public void setLanguageToName(Map<String, String> languageToName) {
+    public Monster setLanguageToName(Map<String, String> languageToName) {
         this.languageToName = languageToName;
-    }
-
-    public void setName(String key, String value) {
-        languageToName.put(key, value);
+        return this;
     }
 
     public String getLevelMin() {
@@ -78,15 +95,6 @@ public class Monster implements Serializable {
 
     public Monster setLevelMax(String levelMax) {
         this.levelMax = levelMax;
-        return this;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public Monster setType(Type type) {
-        this.type = type;
         return this;
     }
 
@@ -112,7 +120,8 @@ public class Monster implements Serializable {
         return picture;
     }
 
-    public void setPicture(String picture) {
+    public Monster setPicture(String picture) {
         this.picture = picture;
+        return this;
     }
 }

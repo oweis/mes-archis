@@ -24,9 +24,8 @@ public class RestApiApplication {
     @Bean
     CommandLineRunner init() {
         return args -> {
-
             //To be removed later:  as we still populating the db, we will need to drop it each time
-            mongoTemplate.getDb().drop();
+           // mongoTemplate.getDb().drop();
             scrapper.populateDatabase();
         };
     }

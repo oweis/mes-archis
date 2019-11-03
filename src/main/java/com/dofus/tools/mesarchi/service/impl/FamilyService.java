@@ -24,12 +24,12 @@ public class FamilyService {
         return familyRepository.findById(id).orElseGet(Family::new);
     }
 
-    public Family addFamily(Family family) {
-        return familyRepository.save(family);
+    public Family addFamily(Family whiskey) {
+        return familyRepository.save(whiskey);
     }
 
-    public Family updateFamily(Family family) {
-        return familyRepository.save(family);
+    public Family updateFamily(Family whiskey) {
+        return familyRepository.save(whiskey);
     }
 
     public void deleteFamily(String id) {
