@@ -35,11 +35,13 @@ public class MonsterService {
         monsterRepository.deleteById(id);
     }
 
+    /*
     public Monster getMonsterByLanguageToNamePair(String language, String name){
         return getAllMonsters().stream()
                 .filter(monster -> name.equals(monster.getLanguageToName().get(language)))
                 .findFirst()
                 .get();
     }
+    */
 
 }
